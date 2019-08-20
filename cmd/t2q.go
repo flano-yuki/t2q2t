@@ -12,7 +12,6 @@ import (
 	"os"
 )
 
-// t2qCmd represents the t2q command
 var t2qCmd = &cobra.Command{
 	Use:   "t2q",
 	Short: "Listen by tcp, and forward to quic",

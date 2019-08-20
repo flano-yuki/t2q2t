@@ -1,20 +1,8 @@
 package cmd
 
 import (
-	//	"context"
-	//	"crypto/rand"
-	//	"crypto/rsa"
-	//	"crypto/tls"
-	//	"crypto/x509"
-	//	"encoding/pem"
-	//	"flag"
 	"fmt"
-	//	"math/big"
-	//	"net"
 	"os"
-	//
-	//	quic "github.com/lucas-clemente/quic-go"
-	//	"golang.org/x/sync/errgroup"
 	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -24,11 +12,10 @@ import (
 var cfgFile string
 var Verbose bool
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "t2q2t",
-	Short: "tcp/quic port forward toold",
-	Long:  `tcp/quic port forward toold
+	Short: "tcp/quic port forward tool",
+	Long:  `tcp/quic port forward tool
   t2q2t <subcommand> <Listen Addr> <forward Addr>  
 
   go run ./t2q2t.go t2q 0.0.0.0:2022 127.0.0.1:2022
@@ -46,7 +33,6 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.t2q2t.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
 
 }
@@ -65,7 +51,7 @@ func initConfig() {
 		viper.SetConfigName(".t2q2t")
 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
