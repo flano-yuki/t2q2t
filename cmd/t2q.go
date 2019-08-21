@@ -2,14 +2,14 @@ package cmd
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
-	"github.com/flano-yuki/t2q2t/lib"
-	quic "github.com/lucas-clemente/quic-go"
-	"github.com/spf13/cobra"
-	"golang.org/x/sync/errgroup"
 	"net"
 	"os"
+	"golang.org/x/sync/errgroup"
+	"github.com/spf13/cobra"
+	quic "github.com/lucas-clemente/quic-go"
+	"github.com/flano-yuki/t2q2t/lib"
+	"github.com/flano-yuki/t2q2t/config"
 )
 
 var t2qCmd = &cobra.Command{
@@ -56,11 +56,9 @@ func t2qHandleConn(conn *net.TCPConn, toTcpAddr *net.TCPAddr) error {
 
 	var stream quic.Stream
 
-	tlsConf := &tls.Config{
-		InsecureSkipVerify: true,
-		NextProtos:         []string{"t2q2t"},
-	}
-	sess, err := quic.DialAddr(toTcpAddr.String(), tlsConf, nil)
+	tlsConf := config.GenerateClientTLSConfig()
+	quicConf := config.GenerateClientQUICConfig()
+	sess, err := quic.DialAddr(toTcpAddr.String(), tlsConf, quicConf)
 	if err != nil {
 		return err
 	}
