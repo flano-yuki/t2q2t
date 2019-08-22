@@ -5,62 +5,75 @@ import (
 	"fmt"
 	"golang.org/x/sync/errgroup"
 	"net"
-	"os"
 
-	"github.com/spf13/cobra"
-	quic "github.com/lucas-clemente/quic-go"
-	"github.com/flano-yuki/t2q2t/lib"
 	"github.com/flano-yuki/t2q2t/config"
+	"github.com/flano-yuki/t2q2t/lib"
+	quic "github.com/lucas-clemente/quic-go"
+	"github.com/spf13/cobra"
 )
 
 var q2tCmd = &cobra.Command{
 	Use:   "q2t",
 	Short: "Listen by quic, and forward to tcp",
-	Long:  `Listen by quic, and forward to tcp
+	Long: `Listen by quic, and forward to tcp
   t2q2t q2t <Listen Addr> <forward Addr>  
 
   go run ./t2q2t.go q2t 0.0.0.0:2022 127.0.0.1:22`,
-	Args:  cobra.MinimumNArgs(2),
+	Args: cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("q2t called")
 		listen := args[0]
 		to := args[1]
 
-		runq2t(listen, to)
+		err := runq2t(listen, to)
+		if err != nil {
+			fmt.Printf("Error %s\n", err)
+		}
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(q2tCmd)
-
 }
 
-func runq2t(listen, to string) {
+func runq2t(listen, to string) error {
 	addr := listen
 	fmt.Printf("Listen QUIC on: %s \n", addr)
 
-  tlsConfig := config.GenerateServerTLSConfig()
-  quicConfig := config.GenerateServerQUICConfig()
+	tlsConfig := config.GenerateServerTLSConfig()
+	quicConfig := config.GenerateServerQUICConfig()
 	listener, err := quic.ListenAddr(addr, tlsConfig, quicConfig)
+	if err != nil {
+		return err
+	}
 	toTcpAddr, err := net.ResolveTCPAddr("tcp4", to)
 	if err != nil {
-		os.Exit(0)
+		return err
 	}
+
 	for {
 		sess, err := listener.Accept(context.Background())
 		if err != nil {
-			os.Exit(0)
+			return err
 		}
-		stream, err := sess.AcceptStream(context.Background())
-		if err != nil {
-			os.Exit(0)
-		}
-		go q2tHandleConn(stream, toTcpAddr)
+		//TODO error handling
+		go q2tHandleConn(sess, toTcpAddr)
 	}
-
+	return nil
 }
 
-func q2tHandleConn(stream quic.Stream, toTcpAddr *net.TCPAddr) error {
+func q2tHandleConn(sess quic.Session, toTcpAddr *net.TCPAddr) error {
+	for {
+		stream, err := sess.AcceptStream(context.Background())
+		if err != nil {
+			return err
+		}
+		go q2tHandleStream(stream, toTcpAddr)
+	}
+}
+
+func q2tHandleStream(stream quic.Stream, toTcpAddr *net.TCPAddr) error {
 	fmt.Printf("Connect TCP to: %s \n", toTcpAddr.String())
 	conn, err := net.DialTCP("tcp", nil, toTcpAddr)
 	if err != nil {
@@ -77,4 +90,3 @@ func q2tHandleConn(stream quic.Stream, toTcpAddr *net.TCPAddr) error {
 
 	return nil
 }
-

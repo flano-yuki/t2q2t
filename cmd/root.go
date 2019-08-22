@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"github.com/spf13/cobra"
+	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -15,7 +15,7 @@ var Verbose bool
 var rootCmd = &cobra.Command{
 	Use:   "t2q2t",
 	Short: "tcp/quic port forward tool",
-	Long:  `tcp/quic port forward tool
+	Long: `tcp/quic port forward tool
   t2q2t <subcommand> <Listen Addr> <forward Addr>  
 
   go run ./t2q2t.go t2q 0.0.0.0:2022 127.0.0.1:2022
