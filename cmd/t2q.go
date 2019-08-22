@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 	"net"
-	"os"
 )
 
 var t2qCmd = &cobra.Command{
@@ -25,7 +24,10 @@ var t2qCmd = &cobra.Command{
 		listen := args[0]
 		to := args[1]
 
-		runt2q(listen, to)
+		err := runt2q(listen, to)
+		if err != nil {
+			fmt.Printf("[Error] %s\n", err)
+		}
 	},
 }
 
@@ -33,7 +35,7 @@ func init() {
 	rootCmd.AddCommand(t2qCmd)
 }
 
-func runt2q(listen, to string) {
+func runt2q(listen, to string) error {
 	listenTcpAddr, err := net.ResolveTCPAddr("tcp4", listen)
 	toTcpAddr, err := net.ResolveTCPAddr("tcp4", to)
 	if err != nil {
@@ -49,20 +51,23 @@ func runt2q(listen, to string) {
 	for {
 		conn, err := lt.AcceptTCP()
 		if err != nil {
-			os.Exit(0)
+			return err
 		}
 
-    // TODO
-    // and, if connection has closed
+		// TODO
+		// and, if connection has closed
 		if sess == nil {
 			sess, err = quic.DialAddr(toTcpAddr.String(), tlsConf, quicConf)
 			if err != nil {
-				panic(err)
+				return err
 			}
 			fmt.Printf("Connect QUIC to: %s \n", toTcpAddr.String())
 		}
+
+		// TODO error handling
 		go t2qHandleConn(conn, sess)
 	}
+	return nil
 }
 
 func t2qHandleConn(conn *net.TCPConn, sess quic.Session) error {

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"golang.org/x/sync/errgroup"
 	"net"
-	"os"
 
 	"github.com/flano-yuki/t2q2t/config"
 	"github.com/flano-yuki/t2q2t/lib"
@@ -26,34 +25,42 @@ var q2tCmd = &cobra.Command{
 		listen := args[0]
 		to := args[1]
 
-		runq2t(listen, to)
+		err := runq2t(listen, to)
+		if err != nil {
+			fmt.Printf("Error %s\n", err)
+		}
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(q2tCmd)
-
 }
 
-func runq2t(listen, to string) {
+func runq2t(listen, to string) error {
 	addr := listen
 	fmt.Printf("Listen QUIC on: %s \n", addr)
 
 	tlsConfig := config.GenerateServerTLSConfig()
 	quicConfig := config.GenerateServerQUICConfig()
 	listener, err := quic.ListenAddr(addr, tlsConfig, quicConfig)
+	if err != nil {
+		return err
+	}
 	toTcpAddr, err := net.ResolveTCPAddr("tcp4", to)
 	if err != nil {
-		os.Exit(0)
+		return err
 	}
+
 	for {
 		sess, err := listener.Accept(context.Background())
 		if err != nil {
-			os.Exit(0)
+			return err
 		}
+		//TODO error handling
 		go q2tHandleConn(sess, toTcpAddr)
 	}
-
+	return nil
 }
 
 func q2tHandleConn(sess quic.Session, toTcpAddr *net.TCPAddr) error {
