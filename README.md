@@ -43,8 +43,8 @@ This is a PoC.
 t2q2t uses "t2q2t" as the ALPN identifier. It is not intended to communicate with other QUIC implementations.
 
 TODO
-- Versioning
-- Use QUIC stream multiplex
 - Improve error handling
+- Improve connection management
+- (Output connection statistics)
 - Many other improvements
 
