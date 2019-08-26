@@ -8,7 +8,10 @@ import (
 
 const BUFFER_SIZE = 0xFFFF
 
-func T2qRelay(fromConn *net.TCPConn, toStream quic.Stream) error {
+func T2qRelay(fromConn *net.TCPConn, toStream *quic.Stream) error {
+	defer (*fromConn).Close()
+	defer (*toStream).Close()
+
 	buff := make([]byte, BUFFER_SIZE)
 	for {
 		n, err := fromConn.Read(buff)
@@ -17,7 +20,7 @@ func T2qRelay(fromConn *net.TCPConn, toStream quic.Stream) error {
 		}
 		b := buff[:n]
 		output("t2q(receive): " + string(b))
-		_, err = toStream.Write(b)
+		_, err = (*toStream).Write(b)
 		if err != nil {
 			return err
 		}
@@ -27,10 +30,13 @@ func T2qRelay(fromConn *net.TCPConn, toStream quic.Stream) error {
 	return nil
 }
 
-func Q2tRelay(fromStream quic.Stream, toConn *net.TCPConn) error {
+func Q2tRelay(fromStream *quic.Stream, toConn *net.TCPConn) error {
+	defer (*toConn).Close()
+	defer (*fromStream).Close()
+
 	buff := make([]byte, BUFFER_SIZE)
 	for {
-		n, err := fromStream.Read(buff)
+		n, err := (*fromStream).Read(buff)
 		if err != nil {
 			return err
 		}

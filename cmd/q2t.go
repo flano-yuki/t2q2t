@@ -69,11 +69,11 @@ func q2tHandleConn(sess quic.Session, toTcpAddr *net.TCPAddr) error {
 		if err != nil {
 			return err
 		}
-		go q2tHandleStream(stream, toTcpAddr)
+		go q2tHandleStream(&stream, toTcpAddr)
 	}
 }
 
-func q2tHandleStream(stream quic.Stream, toTcpAddr *net.TCPAddr) error {
+func q2tHandleStream(stream *quic.Stream, toTcpAddr *net.TCPAddr) error {
 	fmt.Printf("Connect TCP to: %s \n", toTcpAddr.String())
 	conn, err := net.DialTCP("tcp", nil, toTcpAddr)
 	if err != nil {

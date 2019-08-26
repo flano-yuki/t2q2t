@@ -78,8 +78,8 @@ func t2qHandleConn(conn *net.TCPConn, sess quic.Session) error {
 	}
 
 	eg := errgroup.Group{}
-	eg.Go(func() error { return util.T2qRelay(conn, stream) })
-	eg.Go(func() error { return util.Q2tRelay(stream, conn) })
+	eg.Go(func() error { return util.T2qRelay(conn, &stream) })
+	eg.Go(func() error { return util.Q2tRelay(&stream, conn) })
 
 	if err := eg.Wait(); err != nil {
 		return err
