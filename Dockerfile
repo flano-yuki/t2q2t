@@ -13,4 +13,6 @@ COPY --from=builder /go/src/github.com/flano-yuki/t2q2t/t2q2t /t2q2t
 RUN addgroup go \
   && adduser -D -G go go \
   && chown -R go:go /t2q2t
+EXPOSE 2022
+EXPOSE 2022/udp
 ENTRYPOINT ["/t2q2t"]
