@@ -37,7 +37,7 @@ You can also use the following Dockerfile to try it out in your Docker environme
 ```
 # In the project root directory
 $ docker build -t flano-yuki/t2q2t .
-$ docker run -it --rm flano-yuki/t2q2t
+$ docker run -it -p 2022:2022 -p 2022:2022/udp --rm flano-yuki/t2q2t
 tcp/quic port forward tool
   t2q2t <subcommand> <Listen Addr> <forward Addr>
 
