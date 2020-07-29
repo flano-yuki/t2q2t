@@ -15,7 +15,7 @@ const ALPN = "t2q2t"
 
 func GenerateClientQUICConfig() *quic.Config {
 	return &quic.Config{
-		IdleTimeout:      time.Duration(1) * time.Hour,
+		MaxIdleTimeout:      time.Duration(1) * time.Hour,
 		KeepAlive:        true,
 		HandshakeTimeout: time.Duration(5) * time.Second,
 	}
@@ -23,7 +23,7 @@ func GenerateClientQUICConfig() *quic.Config {
 
 func GenerateServerQUICConfig() *quic.Config {
 	return &quic.Config{
-		IdleTimeout:        time.Duration(1) * time.Hour,
+		MaxIdleTimeout:        time.Duration(1) * time.Hour,
 		KeepAlive:          true,
 		MaxIncomingStreams: 1024,
 	}
