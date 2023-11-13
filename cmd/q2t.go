@@ -6,8 +6,8 @@ import (
 	"golang.org/x/sync/errgroup"
 	"net"
 
-	"github.com/flano-yuki/t2q2t/config"
-	"github.com/flano-yuki/t2q2t/lib"
+	"github.com/oniyan/t2q2t/config"
+	"github.com/oniyan/t2q2t/lib"
 	quic "github.com/quic-go/quic-go"
 	"github.com/spf13/cobra"
 )
