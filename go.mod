@@ -1,4 +1,4 @@
-module github.com/oniyan/t2q2t
+module t2q2t
 
 go 1.13
 
