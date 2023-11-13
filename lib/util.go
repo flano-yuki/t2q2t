@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	quic "github.com/oniyan/t2q2t/quicgo"
+	quic "github.com/quic-go/quic-go"
 	"net"
 )
 
