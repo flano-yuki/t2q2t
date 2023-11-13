@@ -6,7 +6,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
-	quic "github.com/oniyan/t2q2t/quicgo"
+	quic "github.com/quic-go/quic-go"
 	"math/big"
 	"time"
 )
@@ -15,16 +15,16 @@ const ALPN = "t2q2t"
 
 func GenerateClientQUICConfig() *quic.Config {
 	return &quic.Config{
-		MaxIdleTimeout:      time.Duration(1) * time.Hour,
-		KeepAlive:        true,
-		HandshakeTimeout: time.Duration(5) * time.Second,
+		MaxIdleTimeout: time.Duration(1) * time.Hour,
+		//KeepAlivePeriod:      true,
+		HandshakeIdleTimeout: time.Duration(5) * time.Second,
 	}
 }
 
 func GenerateServerQUICConfig() *quic.Config {
 	return &quic.Config{
-		MaxIdleTimeout:        time.Duration(1) * time.Hour,
-		KeepAlive:          true,
+		MaxIdleTimeout: time.Duration(1) * time.Hour,
+		//KeepAlivePeriod:    true,
 		MaxIncomingStreams: 1024,
 	}
 }
