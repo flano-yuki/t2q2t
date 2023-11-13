@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	quic "../quicgo"
+	quic "t2q2t/quicgo"
 	"net"
 )
 
