@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/oniyan/t2q2t/config"
 	"github.com/oniyan/t2q2t/lib"
-	quic "github.com/oniyan/t2q2t/quicgo"
+	quic "github.com/quic-go/quic-go"
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 	"net"
@@ -47,7 +47,7 @@ func runt2q(listen, to string) error {
 
 	tlsConf := config.GenerateClientTLSConfig()
 	quicConf := config.GenerateClientQUICConfig()
-	var sess quic.Session = nil
+	var sess quic.Connection = nil
 	for {
 		conn, err := lt.AcceptTCP()
 		if err != nil {
@@ -57,7 +57,7 @@ func runt2q(listen, to string) error {
 		// TODO
 		// and, if connection has closed
 		if sess == nil {
-			sess, err = quic.DialAddr(toTcpAddr.String(), tlsConf, quicConf)
+			sess, err = quic.DialAddr(context.Background(), toTcpAddr.String(), tlsConf, quicConf)
 			if err != nil {
 				return err
 			}
@@ -70,7 +70,7 @@ func runt2q(listen, to string) error {
 	return nil
 }
 
-func t2qHandleConn(conn *net.TCPConn, sess quic.Session) error {
+func t2qHandleConn(conn *net.TCPConn, sess quic.Connection) error {
 	var stream quic.Stream
 	stream, err := sess.OpenStreamSync(context.Background())
 	if err != nil {
