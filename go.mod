@@ -1,4 +1,4 @@
-module t2q2t
+module github.com/flano-yuki/t2q2t
 
 go 1.13
 
