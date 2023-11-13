@@ -8,7 +8,7 @@ import (
 
 	"github.com/oniyan/t2q2t/config"
 	"github.com/oniyan/t2q2t/lib"
-	quic "t2q2t/quicgo"
+	quic "github.com/oniyan/t2q2t/quicgo"
 	"github.com/spf13/cobra"
 )
 
