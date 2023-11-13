@@ -6,7 +6,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
-	quic "github.com/quic-go/quic-go"
+	quic "quicgo"
 	"math/big"
 	"time"
 )
