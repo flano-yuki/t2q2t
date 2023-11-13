@@ -6,7 +6,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
-	quic "t2q2t/quicgo"
+	quic "github.com/oniyan/t2q2t/quicgo"
 	"math/big"
 	"time"
 )
