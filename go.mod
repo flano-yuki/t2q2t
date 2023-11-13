@@ -3,7 +3,7 @@ module github.com/oniyan/t2q2t
 go 1.13
 
 require (
-	github.com/quic-go/quic-go v0.11.2
+	// github.com/quic-go/quic-go v0.11.2
 	github.com/lucas-clemente/quic-go v0.11.2
 	github.com/spf13/cobra v0.0.5 // indirect
 	github.com/spf13/viper v1.4.0 // indirect
