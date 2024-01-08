@@ -30,7 +30,7 @@ func GenerateClientTLSConfig() *tls.Config {
 }
 
 func GenerateServerTLSConfig(certFile, keyFile string) (*tls.Config, error) {
-	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
+	cert, _ := tls.LoadX509KeyPair(certFile, keyFile)
 	return &tls.Config{
 		Certificates: []tls.Certificate{cert},
 		NextProtos:   []string{ALPN},
