@@ -34,5 +34,5 @@ func GenerateServerTLSConfig(certFile, keyFile string) (*tls.Config, error) {
 	return &tls.Config{
 		Certificates: []tls.Certificate{cert},
 		NextProtos:   []string{ALPN},
-	}, nil
+	}
 }
