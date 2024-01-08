@@ -7,7 +7,8 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/oniyan/t2q2t"
+	"github.com/oniyan/t2q2t/config"
+	"github.com/oniyan/t2q2t/lib"
 	quic "github.com/quic-go/quic-go"
 	"github.com/spf13/cobra"
 )
@@ -44,7 +45,7 @@ func runq2t(listen, to string) error {
 	keyFile := "./key.pem"
 	tlsConf := config.GenerateClientTLSConfig(certFile, keyFile)
 	quicConf := config.GenerateClientQUICConfig(certFile, keyFile)
-	listener, err := quic.ListenAddr(addr, tlsConfig, quicConfig)
+	listener, err := quic.ListenAddr(addr, tlsConf, quicConf)
 	if err != nil {
 		return err
 	}
