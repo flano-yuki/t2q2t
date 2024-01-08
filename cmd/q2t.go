@@ -43,8 +43,8 @@ func runq2t(listen, to string) error {
 	fmt.Printf("Listen QUIC on: %s \n", addr)
 	certFile := "./cert.pem"
 	keyFile := "./key.pem"
-	tlsConf := config.GenerateClientTLSConfig(certFile, keyFile)
-	quicConf := config.GenerateClientQUICConfig(certFile, keyFile)
+	tlsConf := config.GenerateServerTLSConfig(certFile, keyFile)
+	quicConf := config.GenerateServerQUICConfig(certFile, keyFile)
 	listener, err := quic.ListenAddr(addr, tlsConf, quicConf)
 	if err != nil {
 		return err
