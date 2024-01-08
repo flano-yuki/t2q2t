@@ -1,6 +1,7 @@
 package config
 
 import (
+	"crypto/tls"
 	quic "github.com/quic-go/quic-go"
 	"time"
 )
