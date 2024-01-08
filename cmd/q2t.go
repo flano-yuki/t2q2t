@@ -3,11 +3,11 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"golang.org/x/sync/errgroup"
 	"net"
 
+	"golang.org/x/sync/errgroup"
+
 	"github.com/oniyan/t2q2t/config"
-	"github.com/oniyan/t2q2t/lib"
 	quic "github.com/quic-go/quic-go"
 	"github.com/spf13/cobra"
 )
@@ -40,9 +40,10 @@ func init() {
 func runq2t(listen, to string) error {
 	addr := listen
 	fmt.Printf("Listen QUIC on: %s \n", addr)
-
-	tlsConfig := config.GenerateServerTLSConfig()
-	quicConfig := config.GenerateServerQUICConfig()
+	certFile := "./cert.pem"
+	keyFile := "./key.pem"
+	tlsConfig := config.GenerateServerTLSConfig(certFile, keyFile)
+	quicConfig := config.GenerateServerQUICConfig(certFile, keyFile)
 	listener, err := quic.ListenAddr(addr, tlsConfig, quicConfig)
 	if err != nil {
 		return err
