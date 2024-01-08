@@ -3,12 +3,12 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"net"
+
 	"github.com/oniyan/t2q2t/config"
-	"github.com/oniyan/t2q2t/lib"
 	quic "github.com/quic-go/quic-go"
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
-	"net"
 )
 
 var t2qCmd = &cobra.Command{
@@ -44,9 +44,10 @@ func runt2q(listen, to string) error {
 	fmt.Printf("Listen TCP on: %s \n", listenTcpAddr.String())
 
 	lt, err := net.ListenTCP("tcp", listenTcpAddr)
-
-	tlsConf := config.GenerateClientTLSConfig()
-	quicConf := config.GenerateClientQUICConfig()
+	certFile := "./cert.pem"
+	keyFile := "./key.pem"
+	tlsConf := config.GenerateClientTLSConfig(certFile, keyFile)
+	quicConf := config.GenerateClientQUICConfig(certFile, keyFile)
 	var sess quic.Connection = nil
 	for {
 		conn, err := lt.AcceptTCP()
