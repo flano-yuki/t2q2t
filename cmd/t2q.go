@@ -48,8 +48,8 @@ func runt2q(listen, to string) error {
 
 	certFile := "./cert.pem"
 	keyFile := "./key.pem"
-	tlsConf := config.GenerateClientTLSConfig(certFile, keyFile)
-	quicConf := config.GenerateClientQUICConfig(certFile, keyFile)
+	tlsConf := config.GenerateClientTLSConfig()
+	quicConf := config.GenerateClientQUICConfig()
 	var sess quic.Connection = nil
 	for {
 		conn, err := lt.AcceptTCP()
