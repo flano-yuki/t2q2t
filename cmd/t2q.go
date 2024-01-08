@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/oniyan/t2q2t"
+	"github.com/oniyan/t2q2t/config"
+	"github.com/oniyan/t2q2t/lib"
 	quic "github.com/quic-go/quic-go"
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
