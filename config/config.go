@@ -17,7 +17,7 @@ func GenerateClientQUICConfig() *quic.Config {
 	return &quic.Config{
 		MaxIdleTimeout:      time.Duration(1) * time.Hour,
 		//KeepAlive:        true,
-		HandshakeTimeout: time.Duration(5) * time.Second,
+		HandshakeIdleTimeout: time.Duration(5) * time.Second,
 	}
 }
 
