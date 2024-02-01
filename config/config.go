@@ -36,13 +36,6 @@ func GenerateClientTLSConfig() *tls.Config {
 	}
 }
 
-func GenerateServerTLSConfig() *tls.Config {
-	return &tls.Config{
-		Certificates: []tls.Certificate{generateServerCertificate()},
-		NextProtos:   []string{ALPN},
-	}
-}
-
 func GenerateServerTLSConfig(certFile, keyFile string) (*tls.Config, error) {
 	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
     	if err != nil {
