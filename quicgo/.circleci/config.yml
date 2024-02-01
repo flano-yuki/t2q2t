@@ -1,0 +1,50 @@
+version: 2.1
+jobs:
+  build:
+    parameters:
+      image:
+        type: string
+        default: \"\"
+      runrace:
+        type: boolean
+        default: false
+    docker:
+      - image: << parameters.image >>
+        environment:
+          GO111MODULE: "on"
+    working_directory: /go/src/github.com/lucas-clemente/quic-go
+    steps:
+      - checkout
+      - run:
+          name: "Setup build environment"
+          command: |
+            go get github.com/onsi/ginkgo/ginkgo
+            go get github.com/onsi/gomega
+      - run:
+          name: "Build infos"
+          command: go version
+      - run:
+          name: "Run benchmark tests"
+          command: ginkgo -randomizeAllSpecs -trace benchmark -- -samples=1
+      - run:
+          name: "Run benchmark tests with race detector"
+          command: ginkgo -race -randomizeAllSpecs -trace benchmark -- -samples=1 -size=10
+      - run:
+          name: "Run tools tests"
+          command: ginkgo -race -r -v -randomizeAllSpecs -trace integrationtests/tools
+      - run:
+          name: "Run self integration tests"
+          command: ginkgo -v -randomizeAllSpecs -trace integrationtests/self
+      - when:
+          condition: << parameters.runrace >>
+          steps:
+            - run:
+                name: "Run self integration tests with race detector"
+                command: ginkgo -race -v -randomizeAllSpecs -trace integrationtests/self
+workflows:
+  workflow:
+    jobs:
+      - build:
+          name: "Go 1.12"
+          image: "circleci/golang:1.12"
+          runrace: true

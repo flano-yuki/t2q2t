@@ -1,9 +1,12 @@
-module github.com/flano-yuki/t2q2t
+module github.com/oniyan/t2q2t
 
-go 1.13
+go 1.20
 
 require (
-	github.com/spf13/cobra v0.0.5 // indirect
-	github.com/spf13/viper v1.4.0 // indirect
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e // indirect
+	github.com/mitchellh/go-homedir v1.1.0
+	github.com/quic-go/quic-go v0.40.0
+	github.com/spf13/cobra v0.0.5
+	github.com/spf13/viper v1.4.0
+	golang.org/x/sync v0.2.0
 )
+

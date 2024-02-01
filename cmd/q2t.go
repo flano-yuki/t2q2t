@@ -3,12 +3,13 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"golang.org/x/sync/errgroup"
 	"net"
 
-	"github.com/flano-yuki/t2q2t/config"
-	"github.com/flano-yuki/t2q2t/lib"
-	quic "github.com/lucas-clemente/quic-go"
+	"golang.org/x/sync/errgroup"
+
+	"github.com/oniyan/t2q2t/config"
+	"github.com/oniyan/t2q2t/lib"
+	quic "github.com/quic-go/quic-go"
 	"github.com/spf13/cobra"
 )
 
@@ -40,10 +41,11 @@ func init() {
 func runq2t(listen, to string) error {
 	addr := listen
 	fmt.Printf("Listen QUIC on: %s \n", addr)
-
-	tlsConfig := config.GenerateServerTLSConfig()
-	quicConfig := config.GenerateServerQUICConfig()
-	listener, err := quic.ListenAddr(addr, tlsConfig, quicConfig)
+	certFile := "./cert.pem"
+	keyFile := "./key.pem"
+	tlsConf, _ := config.GenerateServerTLSConfig(certFile, keyFile)
+	quicConf := config.GenerateServerQUICConfig()
+	listener, err := quic.ListenAddr(addr, tlsConf, quicConf)
 	if err != nil {
 		return err
 	}
@@ -63,7 +65,7 @@ func runq2t(listen, to string) error {
 	return nil
 }
 
-func q2tHandleConn(sess quic.Session, toTcpAddr *net.TCPAddr) error {
+func q2tHandleConn(sess quic.Connection, toTcpAddr *net.TCPAddr) error {
 	for {
 		stream, err := sess.AcceptStream(context.Background())
 		if err != nil {
